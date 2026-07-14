@@ -1,18 +1,13 @@
+
 /*
 Coffee Shop Analytics
-Database Setup
+
+Script: 01_database_setup.sql
+
+Purpose:
+Create the sales table and verify the imported dataset.
 */
 
-/*
-sales
-
-Stores one row per transaction sold.
-
-Source: 
-Coffee_shop_sales.csv
-
-CSV imported using pgAdmin Import Wizard.
-*/
 DROP TABLE IF EXISTS sales;
 
 CREATE TABLE sales (
@@ -34,50 +29,48 @@ CREATE TABLE sales (
     day_type VARCHAR(20) NOT NULL
 );
 
--- Verify that table exists
+
+-- Confirm table was created
+
 SELECT *
 FROM sales;
 
--- Verify row count
+
+-- Check number of records loaded
 
 SELECT COUNT(*) AS total_rows
 FROM sales;
 
--- Preview the data
+
+-- Preview imported data
 
 SELECT *
 FROM sales
 LIMIT 10;
 
--- Inspect the table structure
 
-SELECT column_name, data_type
+-- Review table structure
+
+SELECT 
+    column_name,
+    data_type
 FROM information_schema.columns
 WHERE table_name = 'sales';
+
 
 -- Check for duplicate transaction IDs
 
 SELECT
     transaction_id,
-    COUNT(*)
+    COUNT(*) AS duplicate_count
 FROM sales
 GROUP BY transaction_id
 HAVING COUNT(*) > 1;
 
--- Check for null values
 
-SELECT COUNT(*)
+-- Check for missing revenue values
+
+SELECT
+    COUNT(*) AS missing_revenue
 FROM sales
 WHERE revenue IS NULL;
-
-/*
-Deliverable Complete
-
-✓ Table created
-✓ CSV imported
-✓ Row count verified
-✓ Preview completed
-✓ Schema verified
-
-Database is ready for analysis.
-*/
